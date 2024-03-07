@@ -4,20 +4,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Page Title</title>
-    <!-- You can add additional meta tags, link to stylesheets, or include scripts in the head section -->
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Calculator</title>
+    <link href="style.css" rel="stylesheet">
+    <script src="script.js" defer></script>
 </head>
 
 <body>
-    <!-- Your content goes here -->
-
-    <h1>Hello, World!</h1>
-    <p>This is a basic HTML page.</p>
-
-    <!-- You can add more HTML elements as needed -->
-
-    <!-- Optional: Include JavaScript at the end for better performance -->
-    <!-- <script src="your-script.js"></script> -->
+    <div class="calculator-grid">
+        <!-- Output -->
+        <div class="output">
+            <div class="previous-operand"></div>
+            <div class="current-operand"></div>
+        </div>
+        <!-- Input buttons row 1-->
+        <button class="span-two">AC</button>
+        <button>DEL</button>
+        <button>÷</button>
+        <!-- Input buttons row 2-->
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>*</button>
+        <!-- Input buttons row 3-->
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+        <button>+</button>
+        <!-- Input buttons row 4-->
+        <button>7</button>
+        <button>8</button>
+        <button>9</button>
+        <button>-</button>
+        <!-- Input buttons row 5-->
+        <button>.</button>
+        <button>0</button>
+        <button class="span-two">=</button>
+    </div>
 </body>
 
 </html>
