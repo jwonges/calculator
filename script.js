@@ -15,27 +15,93 @@ class Calculator {
     }
 
     delete() {
-
+        this.currentOperand = this.currentOperand.toString().slice(0, -1)
     }
 
     appendNumber(number) {
-        this.currentOperand = number
+        if (number === '.' && this.currentOperand.includes('.')) return // stops multiple full stop
+        this.currentOperand = this.currentOperand.toString() + number.toString()
     }
 
     chooseOperation(operation) {
-
+        if (this.currentOperand === '') return //stops clearing both current and prev Operand
+        if (this.previousOperand !== '') {
+            this.compute()
+        }
+        this.operation = operation
+        this.previousOperand = this.currentOperand
+        this.currentOperand = ''
     }
 
     compute() {
-
+        let computation // "computation" is a variable 
+        const prev = parseFloat(this.previousOperand) //converting String to Number
+        const current = parseFloat(this.currentOperand)
+        if (isNaN(prev) || isNaN(current)) return
+        switch (this.operation) {
+            case '+':
+                computation = prev + current
+                break
+            case '-':
+                computation = prev - current
+                break
+            case '*':
+                computation = prev * current
+                break
+            case '÷':
+                computation = prev / current
+                break
+            default:
+                return
+        }
+        this.currentOperand = computation
+        this.operation = undefined
+        this.previousOperand = ''
     }
 
+    //Helper function for displaying commas for bigger numbers
+    // getDisplayNumber(number) {
+    //     const floatNumber = parseFloat(number)
+    //     if (isNaN(floatNumber)) return ''
+    //     return floatNumber.toLocaleString('en')
+    // }
+    // Code above shows the bigger numbers with comas (ex. 5,555,555), however it does not let us to use decimals
+    // This is because '.' cannot be turned to parseFloat
+
+
+    getDisplayNumber(number) {
+        //Here we turn the number to String and split the numbers before and after the decimal place '.', before converting back into numbers 
+        const stringNumber = number.toString()
+        const integerDigits = parseFloat(stringNumber.split('.')[0])
+        const decimalDigits = stringNumber.split('.')[1]
+        let integerDisplay
+        //isNaN(integerDigits) = when nothing is in input and or just the decimal place
+        if (isNaN(integerDigits)) {
+            integerDisplay = ''
+        } else {
+            integerDisplay = integerDigits.toLocaleString('en', { 
+            maximumFractionDigits: 0 }) //Here we can use toLocaleString to bring back the comas
+            //maximumFractionDigits => there can be no more decimal places '.' after integerDigits value
+        }
+        if (decimalDigits != null) {
+            return `${integerDisplay}.${decimalDigits}`
+        } else {
+            return integerDisplay
+        }
+    }
+ 
     updateDisplay() {
-        this.currentOperandTextElement.innerText = this.currentOperand
+        this.currentOperandTextElement.innerText = 
+            this.getDisplayNumber(this.currentOperand)
+        if (this.operation != null) {
+            this.previousOperandTextElement.innerText = 
+                `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`
+        } else {
+            this.previousOperandTextElement.innerText = ''
+        }
+        
     }
 }
-
-
 
 //input variables
 const numberButtons = document.querySelectorAll('[data-number]')
@@ -56,4 +122,27 @@ numberButtons.forEach(button => {
         calculator.appendNumber(button.innerText)
         calculator.updateDisplay()
     })
+})
+
+//operation
+operationButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        calculator.chooseOperation(button.innerText)
+        calculator.updateDisplay()
+    })
+})
+
+equalsButton.addEventListener('click', button => {
+    calculator.compute()
+    calculator.updateDisplay()
+})
+
+allClearButton.addEventListener('click', button => {
+    calculator.clear()
+    calculator.updateDisplay()
+})
+
+deleteButton.addEventListener('click', button => {
+    calculator.delete()
+    calculator.updateDisplay()
 })
